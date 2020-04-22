@@ -48,7 +48,24 @@ app.post("/register", function(req,res){
             console.log(err);
             
         }else{
-            res.render("secrets")
+            res.render("secrets");
+        }
+    });
+});
+
+app.post("/login", function(req,res){
+    const userEmail = req.body.username;
+    const userpassword = req.body.password;
+    User.findOne({email: userEmail},function(err, foundUser){
+        if(err){
+            console.log(err);
+            
+        }else{
+            if (foundUser){
+                if (foundUser.password===userpassword){
+                    res.render("secrets");
+                }
+            }
         }
     });
 });
