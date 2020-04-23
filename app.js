@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const encrypt = require("mongoose-encryption");
 
 const app = express();
 
@@ -17,10 +19,13 @@ mongoose.connect("mongodb://localhost:27017/usersDB", {
     useUnifiedTopology: true
 });
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
     email: String,
     password: String
-};
+});
+
+const key = process.env.SECRET;
+userSchema.plugin(encrypt,{secret: key, encryptedFields :["password"]});
 
 const User = mongoose.model("User", userSchema);
 
